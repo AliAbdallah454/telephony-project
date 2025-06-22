@@ -1,4 +1,3 @@
-# register_face.py
 import cv2
 import face_recognition
 import pickle

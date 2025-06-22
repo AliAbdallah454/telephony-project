@@ -1,8 +1,21 @@
 import cv2
 import face_recognition
 import pickle
+from dotenv import load_dotenv
+import os
+
+from my_bot import MyBot
+
+load_dotenv()
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
+
+bot = MyBot(TELEGRAM_BOT_TOKEN, CHAT_ID)
 
 ENCODING_FILE = "encodings.pkl"
+
+seen_faces = set()
 
 with open(ENCODING_FILE, "rb") as f:
     data = pickle.load(f)
@@ -34,6 +47,9 @@ while True:
         if True in matches:
             best_match = matches.index(True)
             name = known_names[best_match]
+            if name not in seen_faces:
+                seen_faces.add(name)
+                bot.send_message([name])
 
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
