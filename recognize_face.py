@@ -3,6 +3,8 @@ import face_recognition
 import pickle
 from dotenv import load_dotenv
 import os
+from PIL import Image
+import numpy as np
 
 from my_bot import MyBot
 from responses import generate_visitor_message
@@ -50,7 +52,13 @@ while True:
             name = known_names[best_match]
             if name not in seen_faces:
                 seen_faces.add(name)
-                bot.send_message([generate_visitor_message(name)])
+                message = generate_visitor_message(name)
+                bot.send_message([message])
+                
+                face_image = frame[top:bottom, left:right]
+                face_rgb = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
+                pil_image = Image.fromarray(face_rgb)
+                bot.send_pil_image(pil_image)
 
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
