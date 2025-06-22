@@ -1,11 +1,8 @@
 from telegram import Bot, InputFile
 import asyncio
-from dotenv import load_dotenv
 import os
 from PIL import Image
 import io
-
-load_dotenv()
 
 class MyBot:
     def __init__(self, telegram_bot_token, chat_id):

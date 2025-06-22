@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 
 from my_bot import MyBot
+from responses import generate_visitor_message
 
 load_dotenv()
 
@@ -49,7 +50,7 @@ while True:
             name = known_names[best_match]
             if name not in seen_faces:
                 seen_faces.add(name)
-                bot.send_message([name])
+                bot.send_message([generate_visitor_message(name)])
 
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
