@@ -30,7 +30,6 @@ seen_faces = set()
 # Socket settings
 HOST = '0.0.0.0'
 PORT = 5001
-
 def handle_received_frame(frame: np.ndarray):
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     locations = face_recognition.face_locations(rgb)
@@ -47,13 +46,21 @@ def handle_received_frame(frame: np.ndarray):
             if name not in seen_faces:
                 seen_faces.add(name)
 
-                message = generate_visitor_message(name)
-                bot.send_message([message])
+                try:
+                    print("sending name ...")
+                    message = generate_visitor_message(name)
+                    bot.send_message([message])
+                except Exception as e:
+                    print(f"⚠️ Failed to send message: {e}")
 
-                face_image = frame[top:bottom, left:right]
-                face_rgb = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
-                pil_image = Image.fromarray(face_rgb)
-                bot.send_pil_image(pil_image)
+                try:
+                    face_image = frame[top:bottom, left:right]
+                    face_rgb = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
+                    pil_image = Image.fromarray(face_rgb)
+                    print("sending image ...")
+                    bot.send_pil_image(pil_image)
+                except Exception as e:
+                    print(f"⚠️ Failed to send image: {e}")
 
         # Optional: draw on frame (for debugging)
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
