@@ -11,5 +11,8 @@ load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
+print(TELEGRAM_BOT_TOKEN)
+print(CHAT_ID)
+
 bot = MyBot(TELEGRAM_BOT_TOKEN, CHAT_ID)
 bot.send_message(["ali"])
