@@ -2,7 +2,7 @@ import cv2
 import time
 import socket
 
-SERVER_IP = '192.168.1.100'  # replace with your laptop's IP
+SERVER_IP = '192.168.1.100'  # Replace with your laptop's IP
 SERVER_PORT = 5001
 
 def capture_and_send():
@@ -17,6 +17,10 @@ def capture_and_send():
             print("❌ Failed to capture image.")
             continue
 
+        # Show captured image on the screen
+        cv2.imshow("Captured Image", frame)
+
+        # Encode and send the image
         _, img_encoded = cv2.imencode('.jpg', frame)
         img_bytes = img_encoded.tobytes()
         img_size = len(img_bytes)
@@ -29,7 +33,14 @@ def capture_and_send():
         except Exception as e:
             print(f"🔌 Connection error: {e}")
 
+        # Break if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
         time.sleep(2)
+
+    cap.release()
+    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     capture_and_send()
